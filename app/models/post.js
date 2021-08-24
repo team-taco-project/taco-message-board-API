@@ -23,7 +23,7 @@ const postSchema = new Schema({
   },
   image: {
     type: String
-  }, 
+  },
   // create a sub-document array called 'comments'
   // defined by commentSchema
   // title: String, body: String
@@ -40,8 +40,6 @@ const postSchema = new Schema({
   toObject: { virtuals: true },
   toJSON: { virtuals: true }
 })
-
-
 
 const post = mongoose.model('post', postSchema)
 
