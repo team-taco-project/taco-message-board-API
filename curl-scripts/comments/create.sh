@@ -1,7 +1,7 @@
 #!/bin/bash
 
 API="http://localhost:4741"
-URL_PATH="/comments"
+URL_PATH="/comment"
 
 curl "${API}${URL_PATH}" \
   --include \
@@ -10,7 +10,8 @@ curl "${API}${URL_PATH}" \
   --data '{
     "comment": {
       "text": "'"${TEXT}"'",
-      "image": "'"${IMAGE}"'"
+      "image": "'"${IMAGE}"'",
+      "postId": "'"${ID}"'"
     }
   }'
 
