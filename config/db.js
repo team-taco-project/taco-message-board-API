@@ -1,7 +1,7 @@
 'use strict'
 
 // creating a base name for the mongodb
-const mongooseBaseName = 'express-api-template'
+const mongooseBaseName = 'taco-message-board-API'
 
 // create the mongodb uri for development and test
 const database = {
