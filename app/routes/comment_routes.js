@@ -10,11 +10,11 @@ const handle404 = customErrors.handle404
 
 // CREATE
 // POST /comments/
-router.post('/comment', (req, res, next) => {
+router.post('/comment/:id', (req, res, next) => {
   // get the comment data from the body of the request
   const commentData = req.body.comment
   // get the post id from the body
-  const postId = commentData.postId
+  const postId = req.params.id
   // find the post by its id
   Post.findById(postId)
     .then(handle404)
