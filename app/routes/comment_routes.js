@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 // require post model
 const Post = require('./../models/post')
-
 const customErrors = require('../../lib/custom_errors')
 
 // we'll use this function to send 404 when non-existant document is requested
@@ -31,9 +30,11 @@ router.post('/post/:id', (req, res, next) => {
 
 // DESTROY
 // DELETE /comments/:id
-router.delete('/post/:id', (req, res, next) => {
-  const commentId = req.params.id
-  Post.findOne({ 'comments._id': commentId })
+router.delete('/post/:postId/:commentId', (req, res, next) => {
+  const postId = req.params.postId
+  const commentId = req.params.commentId
+  console.log(commentId)
+  Post.findById(postId)
     .then(handle404)
     .then((post) => {
       post.comments.id(commentId).remove()
