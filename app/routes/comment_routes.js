@@ -10,7 +10,7 @@ const handle404 = customErrors.handle404
 
 // CREATE
 // POST /comments/
-router.post('/comment/:id', (req, res, next) => {
+router.post('/post/:id', (req, res, next) => {
   // get the comment data from the body of the request
   const commentData = req.body.comment
   // get the post id from the body
@@ -31,8 +31,8 @@ router.post('/comment/:id', (req, res, next) => {
 
 // DESTROY
 // DELETE /comments/:id
-router.delete('/comments/:id', (req, res, next) => {
-  const commentId = req.params.id
+router.delete('/post/:id', (req, res, next) => {
+  const commentId = this.state.post.comments
   Post.findOne({ 'comments._id': commentId })
     .then(handle404)
     .then((post) => {
@@ -45,7 +45,7 @@ router.delete('/comments/:id', (req, res, next) => {
 
 // UPDATE
 // PATCH /comments/:id
-router.patch('/comments/:id', (req, res, next) => {
+router.patch('/update-comments/:id', (req, res, next) => {
   const commentId = req.params.id
   const commentData = req.body.comment
   Post.findOne({
