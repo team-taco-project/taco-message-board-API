@@ -32,7 +32,7 @@ router.post('/post/:id', (req, res, next) => {
 // DESTROY
 // DELETE /comments/:id
 router.delete('/post/:id', (req, res, next) => {
-  const commentId = this.state.post.comments
+  const commentId = req.params.id
   Post.findOne({ 'comments._id': commentId })
     .then(handle404)
     .then((post) => {
