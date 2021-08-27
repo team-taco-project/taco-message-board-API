@@ -12,10 +12,6 @@ const passport = require('passport')
 const requireToken = passport.authenticate('bearer', { session: false })
 const requireOwnership = customErrors.requireOwnership
 
-const passport = require('passport')
-const requireToken = passport.authenticate('bearer', { session: false })
-const requireOwnership = customErrors.requireOwnership
-
 // we'll use this function to send 404 when non-existant document is requested
 const handle404 = customErrors.handle404
 
@@ -70,7 +66,6 @@ router.patch('/comments/:postId/:commentId/', (req, res, next) => {
     .then(handle404)
   // return updated comment
     .then((post) => {
-
       const newComment = post.comments.id(commentId)
       requireOwnership(req, newComment)
       newComment.set(commentData)
@@ -80,6 +75,5 @@ router.patch('/comments/:postId/:commentId/', (req, res, next) => {
     .then(() => res.sendStatus(204))
     .catch(next)
 })
-
 
 module.exports = router
