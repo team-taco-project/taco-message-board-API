@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const commentSchema = require('./comment')
 
 const userSchema = new mongoose.Schema(
   {
@@ -12,7 +11,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    comments: [commentSchema],
     token: String
   },
   {
