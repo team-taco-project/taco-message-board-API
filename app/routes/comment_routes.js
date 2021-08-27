@@ -4,6 +4,13 @@ const router = express.Router()
 const Post = require('./../models/post')
 // import custom_errors function
 const customErrors = require('../../lib/custom_errors')
+// const passport = require('passport')
+// const requireToken = passport.authenticate('bearer', { session: false })
+
+// three requires necessary for authenticating delete/update
+const passport = require('passport')
+const requireToken = passport.authenticate('bearer', { session: false })
+const requireOwnership = customErrors.requireOwnership
 
 const passport = require('passport')
 const requireToken = passport.authenticate('bearer', { session: false })
@@ -63,6 +70,7 @@ router.patch('/comments/:postId/:commentId/', (req, res, next) => {
     .then(handle404)
   // return updated comment
     .then((post) => {
+
       const newComment = post.comments.id(commentId)
       requireOwnership(req, newComment)
       newComment.set(commentData)
@@ -72,4 +80,6 @@ router.patch('/comments/:postId/:commentId/', (req, res, next) => {
     .then(() => res.sendStatus(204))
     .catch(next)
 })
+
+
 module.exports = router
