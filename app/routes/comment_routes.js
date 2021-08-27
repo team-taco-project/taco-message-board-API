@@ -4,6 +4,8 @@ const router = express.Router()
 const Post = require('./../models/post')
 // import custom_errors function
 const customErrors = require('../../lib/custom_errors')
+// const passport = require('passport')
+// const requireToken = passport.authenticate('bearer', { session: false })
 
 // three requires necessary for authenticating delete/update
 const passport = require('passport')
@@ -36,6 +38,7 @@ router.post('/post/:id', (req, res, next) => {
 
 // DESTROY
 // DELETE /comments/:id
+
 router.delete('/post/:postId/:commentId', requireToken, (req, res, next) => {
   const postId = req.params.postId
   const commentId = req.params.commentId
@@ -63,10 +66,11 @@ router.patch('/update-comments/:postId/:commentId', (req, res, next) => {
     .then(handle404)
     // return updated comment
     .then((post) => {
-      return post.comments.id(commentId).updateOne(commentData)
-    })
+      return post.comments.id(commentId).updateOne(commentData)  })
     // send response
     .then(() => res.sendStatus(204))
     .catch(next)
 })
+
+
 module.exports = router
