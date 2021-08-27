@@ -5,6 +5,11 @@ const Post = require('./../models/post')
 // import custom_errors function
 const customErrors = require('../../lib/custom_errors')
 
+// three requires necessary for authenticating delete/update
+const passport = require('passport')
+const requireToken = passport.authenticate('bearer', { session: false })
+const requireOwnership = customErrors.requireOwnership
+
 // we'll use this function to send 404 when non-existant document is requested
 const handle404 = customErrors.handle404
 
@@ -31,17 +36,17 @@ router.post('/post/:id', (req, res, next) => {
 
 // DESTROY
 // DELETE /comments/:id
-router.delete('/post/:id', (req, res, next) => {
-  // get comment id
-  const commentId = req.params.id
-  Post.findOne({ 'comments._id': commentId })
+router.delete('/post/:postId/:commentId', requireToken, (req, res, next) => {
+  const postId = req.params.postId
+  const commentId = req.params.commentId
+  Post.findById(postId)
     .then(handle404)
-    // remove comment
     .then((post) => {
-      post.comments.id(commentId).remove()
+      const singleComment = post.comments.id(commentId)
+      requireOwnership(req, singleComment)
+      singleComment.remove()
       return post.save()
     })
-    // send response
     .then(() => res.sendStatus(204))
     .catch(next)
 })
