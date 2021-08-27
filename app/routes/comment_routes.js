@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 // require post model
 const Post = require('./../models/post')
-
+// import custom_errors function
 const customErrors = require('../../lib/custom_errors')
 
 // we'll use this function to send 404 when non-existant document is requested
@@ -32,31 +32,35 @@ router.post('/post/:id', (req, res, next) => {
 // DESTROY
 // DELETE /comments/:id
 router.delete('/post/:id', (req, res, next) => {
+  // get comment id
   const commentId = req.params.id
   Post.findOne({ 'comments._id': commentId })
     .then(handle404)
+    // remove comment
     .then((post) => {
       post.comments.id(commentId).remove()
       return post.save()
     })
+    // send response
     .then(() => res.sendStatus(204))
     .catch(next)
 })
 
-// UPDATE
+// UPDATE comment - still under construction
 // PATCH /comments/:id
-router.patch('/update-comments/:id', (req, res, next) => {
-  const commentId = req.params.id
+router.patch('/update-comments/:postId/:commentId', (req, res, next) => {
+  // get comment and post id for update
+  const commentId = req.params.commentId
+  const postId = req.params.postId
   const commentData = req.body.comment
-  Post.findOne({
-    'comments._id': commentId
-  })
+  // find post to find comment to update
+  Post.findOne(postId)
     .then(handle404)
+    // return updated comment
     .then((post) => {
-      const comment = post.comments.id(commentId)
-      comment.set(commentData)
-      return post.save()
+      return post.comments.id(commentId).updateOne(commentData)
     })
+    // send response
     .then(() => res.sendStatus(204))
     .catch(next)
 })

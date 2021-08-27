@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+// create userSchema with email, hashedPassword and token
 const userSchema = new mongoose.Schema({
   email: {
     type: String,

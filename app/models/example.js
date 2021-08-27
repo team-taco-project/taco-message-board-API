@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+// schema example provided not used.
 const exampleSchema = new mongoose.Schema({
   title: {
     type: String,

@@ -7,7 +7,8 @@ const commentSchema = require('./comment')
 const User = require('./user')
 // Create schema constructor
 const Schema = mongoose.Schema
-
+// create postSchema with title, subject, content, image,
+// comments (as sub-documents), owner = user
 const postSchema = new Schema({
   title: {
     type: String,
