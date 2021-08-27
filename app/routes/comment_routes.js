@@ -48,10 +48,11 @@ router.delete('/post/:postId/:commentId', (req, res, next) => {
 
 // UPDATE
 // PATCH /comments/:id
-router.patch('/post/:commentId', (req, res, next) => {
+router.patch('/post/:postId/:commentId', (req, res, next) => {
+  const postId = req.params.postId
   const commentId = req.params.commentId
   const commentData = req.body.comment
-  Post.findById(commentId)
+  Post.findById(postId)
     .then(handle404)
     .then((comment) => {
       const newComment = comment.id(commentId)
