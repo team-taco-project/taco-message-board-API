@@ -2,9 +2,15 @@ const express = require('express')
 const router = express.Router()
 // require post model
 const Post = require('./../models/post')
+// import custom_errors function
 const customErrors = require('../../lib/custom_errors')
 // const passport = require('passport')
 // const requireToken = passport.authenticate('bearer', { session: false })
+
+// three requires necessary for authenticating delete/update
+const passport = require('passport')
+const requireToken = passport.authenticate('bearer', { session: false })
+const requireOwnership = customErrors.requireOwnership
 
 // we'll use this function to send 404 when non-existant document is requested
 const handle404 = customErrors.handle404
@@ -32,53 +38,39 @@ router.post('/post/:id', (req, res, next) => {
 
 // DESTROY
 // DELETE /comments/:id
-router.delete('/post/:postId/:commentId', (req, res, next) => {
+
+router.delete('/post/:postId/:commentId', requireToken, (req, res, next) => {
   const postId = req.params.postId
   const commentId = req.params.commentId
-  console.log(commentId)
   Post.findById(postId)
     .then(handle404)
     .then((post) => {
-      post.comments.id(commentId).remove()
+      const singleComment = post.comments.id(commentId)
+      requireOwnership(req, singleComment)
+      singleComment.remove()
       return post.save()
     })
     .then(() => res.sendStatus(204))
     .catch(next)
 })
 
-// UPDATE
+// UPDATE comment - still under construction
 // PATCH /comments/:id
-router.patch('/post/:postId/:commentId', (req, res, next) => {
-  const postId = req.params.postId
+router.patch('/update-comments/:postId/:commentId', (req, res, next) => {
+  // get comment and post id for update
   const commentId = req.params.commentId
+  const postId = req.params.postId
   const commentData = req.body.comment
-  Post.findById(postId)
+  // find post to find comment to update
+  Post.findOne(postId)
     .then(handle404)
-    .then((comment) => {
-      const newComment = comment.id(commentId)
-      newComment.set(commentData)
-      return comment.save()
-    })
+    // return updated comment
+    .then((post) => {
+      return post.comments.id(commentId).updateOne(commentData)  })
+    // send response
     .then(() => res.sendStatus(204))
     .catch(next)
 })
 
-// // SHOW
-// // GET /posts/5a7db6c74d55bc51bdf39793
-// router.get('/post/:postId/:commentId', requireToken, (req, res, next) => {
-//   // req.params.id will be set based on the `:id` in the route
-//   const postId = req.params.postId
-//   const commentId = req.params.commentId
-//   Post.findById(postId)
-//     .then(handle404)
-//   // if `findById` is succesful, respond with 200 and "post" JSON
-//   // find comment
-//   // return comment
-//     .then((post) => {
-//       const comment = post.comments.id(commentId)
-//       res.status(200).json({ comments: comment.toObject() })
-//     })
-//   // if an error occurs, pass it to the handler
-//     .catch(next)
-// })
+
 module.exports = router
