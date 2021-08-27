@@ -64,6 +64,7 @@ router.patch('/comments/:postId/:commentId/', (req, res, next) => {
   // return updated comment
     .then((post) => {
       const newComment = post.comments.id(commentId)
+      requireOwnership(req, newComment)
       newComment.set(commentData)
       return post.save()
     })
