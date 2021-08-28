@@ -25,6 +25,9 @@ const postSchema = new Schema({
   image: {
     type: String
   },
+  userEmail: {
+    type: String
+  },
   // create a sub-document array called 'comments'
   // defined by commentSchema
   // title: String, body: String
