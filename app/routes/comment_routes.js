@@ -7,7 +7,6 @@ const customErrors = require('../../lib/custom_errors')
 // const passport = require('passport')
 // const requireToken = passport.authenticate('bearer', { session: false })
 
-// three requires necessary for authenticating delete/update
 const passport = require('passport')
 const requireToken = passport.authenticate('bearer', { session: false })
 const requireOwnership = customErrors.requireOwnership
@@ -63,14 +62,11 @@ router.patch('/post/:postId/:commentId', (req, res, next) => {
   const commentData = req.body.comment
   console.log('req.body.post.comment ', commentData)
   // find post to find comment to update
-  console.log('pid, cid', postId, commentId)
   Post.findById(postId)
     .then(handle404)
   // return updated comment
     .then((post) => {
-      console.log(post.comments)
       const newComment = post.comments.id(commentId)
-      // requireOwnership(req, newComment)
       newComment.set(commentData)
       return post.save()
     })
