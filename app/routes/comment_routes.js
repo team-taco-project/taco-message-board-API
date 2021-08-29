@@ -17,7 +17,8 @@ const handle404 = customErrors.handle404
 
 // CREATE
 // POST /comments/
-router.post('/post/:id', (req, res, next) => {
+router.post('/post/:id', requireToken, (req, res, next) => {
+  req.body.comment.owner = req.user.id
   // get the comment data from the body of the request
   const commentData = req.body.comment
   // get the post id from the body
@@ -38,7 +39,6 @@ router.post('/post/:id', (req, res, next) => {
 
 // DESTROY
 // DELETE /comments/:id
-
 router.delete('/post/:postId/:commentId', requireToken, (req, res, next) => {
   const postId = req.params.postId
   const commentId = req.params.commentId
@@ -54,23 +54,29 @@ router.delete('/post/:postId/:commentId', requireToken, (req, res, next) => {
     .catch(next)
 })
 
-// UPDATE comment - still under construction
+// UPDATE
 // PATCH /comments/:id
-router.patch('/update-comments/:postId/:commentId', (req, res, next) => {
+router.patch('/post/:postId/:commentId', (req, res, next) => {
   // get comment and post id for update
-  const commentId = req.params.commentId
   const postId = req.params.postId
+  const commentId = req.params.commentId
   const commentData = req.body.comment
+  console.log('req.body.post.comment ', commentData)
   // find post to find comment to update
-  Post.findOne(postId)
+  console.log('pid, cid', postId, commentId)
+  Post.findById(postId)
     .then(handle404)
-    // return updated comment
+  // return updated comment
     .then((post) => {
-      return post.comments.id(commentId).updateOne(commentData)  })
-    // send response
+      console.log(post.comments)
+      const newComment = post.comments.id(commentId)
+      // requireOwnership(req, newComment)
+      newComment.set(commentData)
+      return post.save()
+    })
+  // send response
     .then(() => res.sendStatus(204))
     .catch(next)
 })
-
 
 module.exports = router
