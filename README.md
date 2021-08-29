@@ -2,7 +2,7 @@
 The app is a message board that allows the user to make, update and delete posts.  It also lets the user make, update and delete comments.  This is the code for the server side.
 # IMPORTANT LINKS
 - Other Repo [CLIENT REPO](https://github.com/team-taco-project/taco-message-board-client)
-- Deployed Client 
+- Deployed Client [DEPLOYED CLIENT](https://team-taco-project.github.io/taco-message-board-client/)
 - Deployed API 
 # PLANNING STORY
 The group met on the first day and planned what app the group would make, and decided on a message board app.  We planned to code the backend first then the frontend, leaving the styling for last.  The group drew up user stories.  They used the user stories to draw up the ERD and wire-frame models.  The group also decided to pair/mob program all of the code.
