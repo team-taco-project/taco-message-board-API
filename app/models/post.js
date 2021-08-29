@@ -9,38 +9,44 @@ const User = require('./user')
 const Schema = mongoose.Schema
 // create postSchema with title, subject, content, image,
 // comments (as sub-documents), owner = user
-const postSchema = new Schema({
-  title: {
-    type: String,
-    required: true
+const postSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true
+    },
+    subject: {
+      type: String,
+      required: true
+    },
+    content: {
+      type: String,
+      required: true
+    },
+    image: {
+      type: String
+    },
+    userEmail: {
+      type: String
+    },
+    // create a sub-document array called 'comments'
+    // defined by commentSchema
+    // title: String, body: String
+    // want to add extra schema type options
+    // comments: [{type: commentSchema, required: true}]
+    comments: [commentSchema],
+    // using references
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }
   },
-  subject: {
-    type: String,
-    required: true
-  },
-  content: {
-    type: String,
-    required: true
-  },
-  image: {
-    type: String
-  },
-  // create a sub-document array called 'comments'
-  // defined by commentSchema
-  // title: String, body: String
-  // want to add extra schema type options
-  // comments: [{type: commentSchema, required: true}]
-  comments: [commentSchema],
-  // using references
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
+  {
+    timestamps: true,
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true }
   }
-}, {
-  timestamps: true,
-  toObject: { virtuals: true },
-  toJSON: { virtuals: true }
-})
+)
 
 const post = mongoose.model('post', postSchema)
 

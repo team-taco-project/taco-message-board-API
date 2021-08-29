@@ -56,7 +56,7 @@ router.delete('/post/:postId/:commentId', requireToken, (req, res, next) => {
 
 // UPDATE
 // PATCH /comments/:id
-router.patch('/comments/:postId/:commentId/', (req, res, next) => {
+router.patch('/post/:postId/:commentId/', (req, res, next) => {
   // get comment and post id for update
   const postId = req.params.postId
   const commentId = req.params.commentId
@@ -67,7 +67,7 @@ router.patch('/comments/:postId/:commentId/', (req, res, next) => {
   // return updated comment
     .then((post) => {
       const newComment = post.comments.id(commentId)
-      requireOwnership(req, newComment)
+      // requireOwnership(req, newComment)
       newComment.set(commentData)
       return post.save()
     })
